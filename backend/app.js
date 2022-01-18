@@ -27,6 +27,10 @@ app.use(
 const user = require("./routes/userRoute");
 const file = require("./routes/fileRoute");
 
+app.get("/", (req, res) => {
+  res.json("Drive API");
+});
+
 app.use("/user-service/", user);
 app.use("/file-service/", file);
 
