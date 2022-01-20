@@ -9,8 +9,7 @@ const conn = mongoose.connection;
 
 const createThumbnail = (file, filename, user) => {
   return new Promise((resolve) => {
-    // const password = user.getEncryptionKey();
-    const password = "ahskshdkj";
+    const password = user.getEncryptionKey();
 
     let CIPHER_KEY = crypto.createHash("sha256").update(password).digest();
 

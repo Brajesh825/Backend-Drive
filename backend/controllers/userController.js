@@ -15,6 +15,12 @@ const registerUser = catchAsyncErrors(async (req, res, next) => {
     email,
     password,
   });
+
+  user.generateEncryptionKeys();
+  const decoded = await user.getEncryptionKey();
+
+  console.log(decoded);
+
   const emailToken = user.getEmailConfirmationToken();
   await user.save();
 

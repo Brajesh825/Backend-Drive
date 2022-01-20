@@ -20,9 +20,8 @@ const DbUtilsFile = new DbUtilFile();
 class MongoService {
   constructor() {}
   uploadFile = async (user, busboy, req) => {
-    // const password = user.getEncryptionKey();
+    const password = user.getEncryptionKey();
     // Password is unique encryption key
-    const password = "ahskshdkj";
     if (!password) {
       throw new ForbiddenError("Invalid Encryption Key");
     }
@@ -85,9 +84,8 @@ class MongoService {
   };
 
   getThumbnail = async (user, id) => {
-    // const password = user.getEncryptionKey();
+    const password = user.getEncryptionKey();
     // Password is unique encryption key
-    const password = "ahskshdkj";
     if (!password) {
       throw new ForbiddenError("Invalid Encryption Key");
     }
@@ -119,9 +117,9 @@ class MongoService {
       throw new NotFoundError("Download File Not Found");
     }
 
-    // const password = user.getEncryptionKey();
+    const password = user.getEncryptionKey();
     // Password is unique encryption key
-    const password = "ahskshdkj";
+
     if (!password) throw new ForbiddenError("Invalid Encryption Key");
 
     const bucket = new mongoose.mongo.GridFSBucket(conn.db);

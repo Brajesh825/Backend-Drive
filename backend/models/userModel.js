@@ -50,6 +50,12 @@ const userSchema = new mongoose.Schema({
     storageSize: Number,
     failed: Boolean,
   },
+  privateKey: {
+    type: String,
+  },
+  publicKey: {
+    type: String,
+  },
 });
 
 userSchema.pre("save", async function (next) {
@@ -97,6 +103,77 @@ userSchema.methods.getEmailConfirmationToken = function () {
     .digest("hex");
 
   return resetToken;
+};
+
+userSchema.methods.generateEncryptionKeys = async function () {
+  const user = this;
+  const userPassword = user._id.toString();
+  const masterPassword = process.env.KEY;
+
+  const randomKey = crypto.randomBytes(32);
+
+  const iv = crypto.randomBytes(16);
+  const USER_CIPHER_KEY = crypto
+    .createHash("sha256")
+    .update(userPassword)
+    .digest();
+  const cipher = crypto.createCipheriv("aes-256-cbc", USER_CIPHER_KEY, iv);
+  let encryptedText = cipher.update(randomKey);
+  encryptedText = Buffer.concat([encryptedText, cipher.final()]);
+
+  const MASTER_CIPHER_KEY = crypto
+    .createHash("sha256")
+    .update(masterPassword)
+    .digest();
+  const masterCipher = crypto.createCipheriv(
+    "aes-256-cbc",
+    MASTER_CIPHER_KEY,
+    iv
+  );
+  const masterEncryptedText = masterCipher.update(encryptedText);
+
+  this.privateKey = Buffer.concat([
+    masterEncryptedText,
+    masterCipher.final(),
+  ]).toString("hex");
+  this.publicKey = iv.toString("hex");
+};
+
+userSchema.methods.getEncryptionKey = function () {
+  try {
+    const user = this;
+    const userPassword = user._id.toString();
+    const masterEncryptedText = user.privateKey;
+    const masterPassword = process.env.KEY;
+    const iv = Buffer.from(user.publicKey, "hex");
+
+    const USER_CIPHER_KEY = crypto
+      .createHash("sha256")
+      .update(userPassword)
+      .digest();
+    const MASTER_CIPHER_KEY = crypto
+      .createHash("sha256")
+      .update(masterPassword)
+      .digest();
+
+    const unhexMasterText = Buffer.from(masterEncryptedText, "hex");
+    const masterDecipher = crypto.createDecipheriv(
+      "aes-256-cbc",
+      MASTER_CIPHER_KEY,
+      iv
+    );
+    let masterDecrypted = masterDecipher.update(unhexMasterText);
+    masterDecrypted = Buffer.concat([masterDecrypted, masterDecipher.final()]);
+
+    let decipher = crypto.createDecipheriv("aes-256-cbc", USER_CIPHER_KEY, iv);
+    let decrypted = decipher.update(masterDecrypted);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+
+    return decrypted;
+  } catch (e) {
+    console.log("Get Encryption Key Error", e);
+    return undefined;
+  }
 };
 
 module.exports = mongoose.model("User", userSchema);
