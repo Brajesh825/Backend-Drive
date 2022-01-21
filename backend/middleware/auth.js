@@ -1,15 +1,36 @@
-const ErrorHandler = require("../utils/errorhandler");
-const catchAsyncError = require("./catchAsyncError");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
-  const { token } = req.cookies;
-  if (!token) {
-    return next(new ErrorHandler("Please login to access this resource", 401));
+const auth = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) {
+      throw new Error("Please login to access this resource");
+    }
+
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decodedData.id).select("-password");
+
+    if (!user) throw new Error("No User");
+
+    if (!user.emailVerified) throw new Error("Email Not Verified");
+
+    req.user = user;
+
+    console.log("no error on authorization");
+
+    next();
+  } catch (e) {
+    if (
+      e.message !== "No Access Token" &&
+      e.message !== "No User" &&
+      e.message !== "Email Not Verified"
+    )
+      console.log("\nAuthorization Middleware Error:", e.message);
+
+    res.status(401).send("Error Authenticating");
   }
-  const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(decodedData);
-  req.user = await User.findById(decodedData.id).select("-password");
-  next();
-});
+};
+
+module.exports = auth;

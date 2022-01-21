@@ -1,27 +1,34 @@
-const ErrorHandler = require("../utils/errorhandler");
-const catchAsyncError = require("./catchAsyncError");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userModel");
 
-const authFullUser = catchAsyncError(async (req, res, next) => {
-  const { token } = req.cookies;
-  if (!token) {
-    return next(new ErrorHandler("Please login to access this resource", 401));
-  }
-  const decodedData = jwt.verify(token, process.env.JWT_SECRET);
-  console.log(decodedData);
-  const id = decodedData.id;
-  const fullUser = await User.findById(id).select("-password");
+const authFullUser = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+    if (!token) {
+      return next(
+        new ErrorHandler("Please login to access this resource", 401)
+      );
+    }
+    const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+    const id = decodedData.id;
+    const fullUser = await User.findById(id).select("-password");
 
-  if (!fullUser) {
-    return next(new ErrorHandler("User is not found", 404));
-  }
-  if (!fullUser.emailVerified) {
-    return next(new ErrorHandler("Email is not verified", 401));
-  }
-  req.user = fullUser;
+    if (!fullUser) throw new Error("No User");
 
-  next();
-});
+    if (!fullUser.emailVerified) throw new Error("Email Not Verified");
+    req.user = fullUser;
+
+    next();
+  } catch (e) {
+    if (
+      e.message !== "No Access Token" &&
+      e.message !== "No User" &&
+      e.message !== "Email Not Verified"
+    )
+      console.log("\nAuthorization Middleware Error:", e.message);
+
+    res.status(401).send("Error Authenticating");
+  }
+};
 
 module.exports = { authFullUser };

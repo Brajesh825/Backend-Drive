@@ -129,7 +129,7 @@ class DbUtil {
       .collection("fs.files")
       .findOneAndUpdate(
         { _id: new ObjectID(fileID), "metadata.owner": new ObjectID(userID) },
-        { $set: { filename: title } }
+        { $set: { filename: { filename: title } } }
       );
 
     return file;

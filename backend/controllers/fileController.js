@@ -1,3 +1,7 @@
+const FileService = require("../services/FileService");
+
+const fileService = new FileService();
+
 class FileController {
   constructor(chunkService) {
     this.chunkService = chunkService;
@@ -51,6 +55,7 @@ class FileController {
     }
   };
 
+  // Download File
   downloadFile = async (req, res) => {
     if (!req.user) {
       return;
@@ -63,6 +68,32 @@ class FileController {
       await this.chunkService.downloadFile(user, fileID, res);
     } catch (e) {
       console.log("\nDownload File Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
+
+  // Rename File
+  renameFile = async (req, res) => {
+    if (!req.user) {
+      return;
+    }
+    try {
+      const fileID = req.body.id;
+      const title = req.body.title;
+      const userID = req.user._id;
+
+      console.log("No error on File Controller");
+
+      await fileService.renameFile(userID, fileID, title);
+
+      res.send();
+    } catch (e) {
+      console.log("\nRename File Error File Route:", e.message);
       const code = !e.code
         ? 500
         : e.code >= 400 && e.code <= 599

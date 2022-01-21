@@ -16,6 +16,8 @@ router.post("/upload", authFullUser, fileController.uploadFile);
 
 router.get("/download/:id", authFullUser, fileController.downloadFile);
 
+router.patch("/rename", auth, fileController.renameFile);
+
 // router.get("/remove", auth, fileController.deleteFile);
 
 module.exports = router;
