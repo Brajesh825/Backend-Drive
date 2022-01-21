@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require("../../db/mongoose");
 const crypto = require("crypto");
 const awaitUploadStream = require("./utils/awaitUploadStream");
 const getBusboyData = require("./utils/getBusboyData");
@@ -12,10 +12,11 @@ const Thumbnail = require("../../models/thumbnail");
 const DbUtilFile = require("../../db/utils/fileUtils");
 const awaitStream = require("./utils/awaitStream");
 const ObjectID = require("mongodb").ObjectID;
+const subtractFromStorageSize = require("./utils/subtractFromStorageSize");
 
 const conn = mongoose.connection;
 
-const DbUtilsFile = new DbUtilFile();
+const dbUtilsFile = new DbUtilFile();
 
 class MongoService {
   constructor() {}
@@ -112,7 +113,7 @@ class MongoService {
   };
 
   downloadFile = async (user, fileID, res) => {
-    const currentFile = await DbUtilsFile.getFileInfo(fileID, user._id);
+    const currentFile = await dbUtilsFile.getFileInfo(fileID, user._id);
     if (!currentFile) {
       throw new NotFoundError("Download File Not Found");
     }
@@ -131,8 +132,6 @@ class MongoService {
 
     const decipher = crypto.createDecipheriv("aes256", CIPHER_KEY, IV);
 
-    console.log(currentFile.length.toString());
-
     res.set("Content-Type", "binary/octet-stream");
     res.set(
       "Content-Disposition",
@@ -143,6 +142,35 @@ class MongoService {
     const allStreamsToErrorCatch = [readStream, decipher];
 
     await awaitStream(readStream.pipe(decipher), res, allStreamsToErrorCatch);
+  };
+
+  deleteFile = async (userID, fileID) => {
+    console.log("checkpoint 1");
+    let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+      chunkSizeBytes: 1024 * 255,
+    });
+    console.log("checkpoint 2");
+
+    const file = await dbUtilsFile.getFileInfo(fileID, userID);
+    console.log("checkpoint 3");
+
+    if (!file) throw new NotFoundError("Delete File Not Found Error");
+    console.log("checkpoint 4");
+
+    if (file.metadata.thumbnailID) {
+      await Thumbnail.deleteOne({ _id: file.metadata.thumbnailID });
+    }
+    console.log("checkpoint 5");
+
+    await bucket.delete(new ObjectID(fileID));
+    console.log("checkpoint 6");
+
+    await subtractFromStorageSize(
+      userID,
+      file.length,
+      file.metadata.personalFile
+    );
+    console.log("checkpoint 7");
   };
 }
 

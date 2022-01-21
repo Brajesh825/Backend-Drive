@@ -102,6 +102,29 @@ class FileController {
       res.status(code).send();
     }
   };
+
+  deleteFile = async (req, res) => {
+    if (!req.user) {
+      return;
+    }
+
+    try {
+      const userID = req.user._id;
+      const fileID = req.body.id;
+
+      await this.chunkService.deleteFile(userID, fileID);
+
+      res.send();
+    } catch (e) {
+      console.log("\nDelete File Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
-module.exports = { FileController };
+module.exports = FileController;

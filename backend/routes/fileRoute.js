@@ -1,7 +1,7 @@
 const express = require("express");
 const { authFullUser } = require("../middleware/authFullUser");
 const auth = require("../middleware/auth");
-const { FileController } = require("../controllers/fileController");
+const FileController = require("../controllers/fileController");
 const MongoService = require("../services/ChunkService/MongoService");
 
 const router = express.Router();
@@ -18,6 +18,6 @@ router.get("/download/:id", authFullUser, fileController.downloadFile);
 
 router.patch("/rename", auth, fileController.renameFile);
 
-// router.get("/remove", auth, fileController.deleteFile);
+router.delete("/remove", auth, fileController.deleteFile);
 
 module.exports = router;

@@ -56,6 +56,11 @@ const userSchema = new mongoose.Schema({
   publicKey: {
     type: String,
   },
+  storageData: {
+    storageSize: Number,
+    storageLimit: Number,
+    failed: Boolean,
+  },
 });
 
 userSchema.pre("save", async function (next) {

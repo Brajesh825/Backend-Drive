@@ -125,11 +125,18 @@ class DbUtil {
   };
 
   renameFile = async (fileID, userID, title) => {
+    const files = await conn.db.collection("fs.files").findOne({
+      _id: new ObjectID(fileID),
+      "metadata.owner": new ObjectID(userID),
+    });
+
+    files.filename.filename = title;
+
     const file = await conn.db
       .collection("fs.files")
       .findOneAndUpdate(
         { _id: new ObjectID(fileID), "metadata.owner": new ObjectID(userID) },
-        { $set: { filename: { filename: title } } }
+        { $set: { filename: files.filename } }
       );
 
     return file;
