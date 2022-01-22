@@ -125,6 +125,29 @@ class FileController {
       res.status(code).send();
     }
   };
+
+  // Make Public
+  makePublic = async (req, res) => {
+    if (!req.user) {
+      return;
+    }
+    try {
+      const fileID = req.params.id;
+      const userID = req.user._id;
+
+      const token = await fileService.makePublic(userID, fileID);
+
+      res.send(token);
+    } catch (e) {
+      console.log("\nMake Public Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
 module.exports = FileController;
