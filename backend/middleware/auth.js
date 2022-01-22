@@ -18,8 +18,6 @@ const auth = async (req, res, next) => {
 
     req.user = user;
 
-    console.log("no error on authorization");
-
     next();
   } catch (e) {
     if (
