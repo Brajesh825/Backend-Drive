@@ -10,8 +10,6 @@ const mongoService = new MongoService();
 
 const fileController = new FileController(mongoService);
 
-router.get("/thumbnail/:id", authFullUser, fileController.getThumbnail);
-
 router.post("/upload", authFullUser, fileController.uploadFile);
 
 router.get("/download/:id", authFullUser, fileController.downloadFile);
@@ -19,5 +17,9 @@ router.get("/download/:id", authFullUser, fileController.downloadFile);
 router.patch("/rename", auth, fileController.renameFile);
 
 router.delete("/remove", auth, fileController.deleteFile);
+
+router.get("/thumbnail/:id", authFullUser, fileController.getThumbnail);
+
+router.patch("/make-public/:id", authFullUser, fileController.makePublic);
 
 module.exports = router;
