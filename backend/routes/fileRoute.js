@@ -22,4 +22,6 @@ router.get("/thumbnail/:id", authFullUser, fileController.getThumbnail);
 
 router.patch("/make-public/:id", authFullUser, fileController.makePublic);
 
+router.get("/public/download/:id/:tempToken", fileController.getPublicDownload);
+
 module.exports = router;

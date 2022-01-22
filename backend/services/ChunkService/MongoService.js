@@ -8,11 +8,13 @@ const addToStorageSize = require("./utils/addToStorageSize");
 const createThumbnailAny = require("./utils/createThumbailAny");
 const NotFoundError = require("../../utils/NotFoundError");
 const ForbiddenError = require("../../utils/ForbiddenError");
+const NotAuthorizedError = require("../../utils/NotAuthorizedError");
 const Thumbnail = require("../../models/thumbnail");
 const DbUtilFile = require("../../db/utils/fileUtils");
 const awaitStream = require("./utils/awaitStream");
 const ObjectID = require("mongodb").ObjectID;
 const subtractFromStorageSize = require("./utils/subtractFromStorageSize");
+const User = require("../../models/userModel");
 
 const conn = mongoose.connection;
 
@@ -171,6 +173,45 @@ class MongoService {
       file.metadata.personalFile
     );
     console.log("checkpoint 7");
+  };
+
+  getPublicDownload = async (fileID, tempToken, res) => {
+    const file = await dbUtilsFile.getPublicFile(fileID);
+
+    if (!file || !file.metadata.link || file.metadata.link !== tempToken) {
+      throw new NotAuthorizedError("File Not Public");
+    }
+
+    const user = await User.findById(file.metadata.owner);
+
+    const password = user.getEncryptionKey();
+
+    if (!password) throw new ForbiddenError("Invalid Encryption Key");
+
+    const bucket = new mongoose.mongo.GridFSBucket(conn.db);
+
+    const IV = file.metadata.IV.buffer;
+
+    const readStream = bucket.openDownloadStream(new ObjectID(fileID));
+
+    const CIPHER_KEY = crypto.createHash("sha256").update(password).digest();
+
+    const decipher = crypto.createDecipheriv("aes256", CIPHER_KEY, IV);
+
+    res.set("Content-Type", "binary/octet-stream");
+    res.set(
+      "Content-Disposition",
+      'attachment; filename="' + file.filename.filename + '"'
+    );
+    res.set("Content-Length", file.length);
+
+    const allStreamsToErrorCatch = [readStream, decipher];
+
+    await awaitStream(readStream.pipe(decipher), res, allStreamsToErrorCatch);
+
+    if (file.metadata.linkType === "one") {
+      await dbUtilsFile.removeOneTimePublicLink(fileID);
+    }
   };
 }
 

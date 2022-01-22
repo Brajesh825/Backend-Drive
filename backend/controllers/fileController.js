@@ -148,6 +148,24 @@ class FileController {
       res.status(code).send();
     }
   };
+
+  // Public Download
+  getPublicDownload = async (req, res) => {
+    try {
+      const ID = req.params.id;
+      const tempToken = req.params.tempToken;
+
+      await this.chunkService.getPublicDownload(ID, tempToken, res);
+    } catch (e) {
+      console.log("\nGet Public Download Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
 module.exports = FileController;
