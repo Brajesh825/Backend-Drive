@@ -26,6 +26,7 @@ app.use(
 // Route imports
 const user = require("./routes/userRoute");
 const file = require("./routes/fileRoute");
+const document = require("./routes/documentRoute");
 
 app.get("/", (req, res) => {
   res.json("Drive API");
@@ -33,6 +34,7 @@ app.get("/", (req, res) => {
 
 app.use("/user-service/", user);
 app.use("/file-service/", file);
+app.use("/documentation/", document);
 
 // Middleware for errors
 app.use(errorMiddleware);

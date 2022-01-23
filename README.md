@@ -12,7 +12,7 @@
 
 ## Login User
 
-         Req type: POST
+        Req type: POST
         PATH: /user-service/login
 
 ## Logout User
@@ -28,11 +28,11 @@
 ## Resend Verify Email -- Login needed
 
         Req type: POST
-        PATH: /user-service/resend-verify-email/:token
+        PATH: /user-service/resend-verify-email/
 
 ## Change Password -- Login needed
 
-        Req type: Patch
+        Req type: PATCH
         PATH: /user-service/change-password
         raw: {
             "oldPassword":"",
@@ -61,3 +61,48 @@
             "password":"",
             "confirmPassword":""
         }
+
+# File API
+
+## Upload File (Single File ,Login Required)
+
+        Req type: POST
+        PATH: /file-service/upload
+        raw: file
+
+## Download File (Login,Needed)
+
+        Req type: GET
+        PATH: /file-service/download/:id
+
+## Rename File (Login Needed)
+
+        Req type: PATCH
+        PATH: /file-service/rename
+        raw: {
+                "id":"fileID",
+                "title":"new name"
+        }
+
+## Remove File (Login Needed)
+
+        Req type: DELETE
+        PATH: /file-service/remove
+        raw: {
+                "id" : "fileID"
+        }
+
+## Get Single Thumbnail (Login Needed)
+
+        Req type: GET
+        PATH: /file-service/thumbnail/:id
+
+## Make File Public (Login Needed)
+
+        Req type: PATCH
+        PATH: /file-service/make-public/:id
+
+## Download Public File
+
+        Req type: GET
+        PATH: /file-service/public/download/:id/tempToken
