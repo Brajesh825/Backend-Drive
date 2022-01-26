@@ -30,9 +30,6 @@ class FileController {
 
   // Upload File
   uploadFile = async (req, res) => {
-    if (!req.user) {
-      return;
-    }
     try {
       const user = req.user;
       const busboy = req.busboy;
@@ -54,10 +51,6 @@ class FileController {
 
   // Download File
   downloadFile = async (req, res) => {
-    if (!req.user) {
-      return;
-    }
-
     try {
       const user = req.user;
       const fileID = req.params.id;
@@ -76,9 +69,6 @@ class FileController {
 
   // Rename File
   renameFile = async (req, res) => {
-    if (!req.user) {
-      return;
-    }
     try {
       const fileID = req.body.id;
       const title = req.body.title;
@@ -101,10 +91,6 @@ class FileController {
   };
 
   deleteFile = async (req, res) => {
-    if (!req.user) {
-      return;
-    }
-
     try {
       const userID = req.user._id;
       const fileID = req.body.id;
@@ -125,9 +111,6 @@ class FileController {
 
   // Make Public
   makePublic = async (req, res) => {
-    if (!req.user) {
-      return;
-    }
     try {
       const fileID = req.params.id;
       const userID = req.user._id;
