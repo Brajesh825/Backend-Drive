@@ -9,9 +9,6 @@ class FileController {
 
   // Get Thumbnail
   getThumbnail = async (req, res) => {
-    if (!req.user) {
-      return;
-    }
     try {
       const user = req.user;
 
