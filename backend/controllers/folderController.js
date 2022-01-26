@@ -46,24 +46,24 @@ class FolderController {
     }
   };
 
-  // getInfo = async (req, res) => {
-  //   try {
-  //     const userID = req.user._id;
-  //     const folderID = req.params.id;
+  getInfo = async (req, res) => {
+    try {
+      const userID = req.user._id;
+      const folderID = req.params.id;
 
-  //     const folder = await folderService.getFolderInfo(userID, folderID);
+      const folder = await folderService.getFolderInfo(userID, folderID);
 
-  //     res.send(folder);
-  //   } catch (e) {
-  //     console.log("\nGet Info Error Folder Route:", e.message);
-  //     const code = !e.code
-  //       ? 500
-  //       : e.code >= 400 && e.code <= 599
-  //       ? e.code
-  //       : 500;
-  //     res.status(code).send();
-  //   }
-  // };
+      res.send(folder);
+    } catch (e) {
+      console.log("\nGet Info Error Folder Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 
   // deleteAll = async (req, res) => {
   //   try {
