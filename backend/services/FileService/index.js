@@ -25,17 +25,6 @@ class MongoFileService {
 
     return token;
   };
-
-  makeOneTimePublic = async (userID, fileID) => {
-    const token = jwt.sign({ _id: userID.toString() }, process.env.JWT_SECRET);
-
-    const file = await dbUtilsFile.makeOneTimePublic(fileID, userID, token);
-
-    if (!file.lastErrorObject.updatedExisting)
-      throw new NotFoundError("Make One Time Public Not Found Error");
-
-    return token;
-  };
 }
 
 module.exports = MongoFileService;

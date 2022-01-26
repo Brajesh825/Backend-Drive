@@ -1,16 +1,21 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const busboy = require("connect-busboy");
 const errorMiddleware = require("./middleware/error");
-const helmet = require("helmet");
-const compression = require("compression");
 
 // Middleware
 app.use(cookieParser());
-app.use(helmet());
-app.use(compression());
 app.use(express.json());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(
+  bodyParser.urlencoded({
+    limit: "50mb",
+    extended: true,
+    parameterLimit: 50000,
+  })
+);
 
 app.use(
   busboy({
@@ -22,22 +27,16 @@ app.use(
 const user = require("./routes/userRoute");
 const file = require("./routes/fileRoute");
 const document = require("./routes/documentRoute");
-const folder = require("./routes/folderRoute");
 
 app.get("/", (req, res) => {
-  res.json({
-    "Drive API": {
-      "View Documentation": "/documentation/view",
-    },
-  });
+  res.json("Drive API");
 });
 
 app.use("/user-service/", user);
 app.use("/file-service/", file);
 app.use("/documentation/", document);
-app.use("/folder-service", folder);
 
 // Middleware for errors
 app.use(errorMiddleware);
-1;
+
 module.exports = app;

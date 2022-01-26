@@ -24,6 +24,4 @@ router.patch("/make-public/:id", authFullUser, fileController.makePublic);
 
 router.get("/public/download/:id/:tempToken", fileController.getPublicDownload);
 
-router.patch("/make-one/:id", auth, fileController.makeOneTimePublic);
-
 module.exports = router;
