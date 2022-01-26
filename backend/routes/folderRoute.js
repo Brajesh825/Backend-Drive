@@ -10,9 +10,9 @@ const router = express.Router();
 
 router.post("/upload", auth, folderController.uploadFolder);
 
-// router.delete("/remove", auth, folderController.deleteFolder);
+router.delete("/remove", auth, folderController.deleteFolder);
 
-// router.get("/info/:id", auth, folderController.getInfo);
+router.get("/info/:id", auth, folderController.getInfo);
 
 // router.delete("/remove-all", auth, folderController.deleteAll);
 
