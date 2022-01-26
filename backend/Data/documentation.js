@@ -77,7 +77,12 @@ const FileApi = [
     "Request Name": "Upload File",
     "Request Type": "POST",
     Path: "/file-service/upload",
-    raw: "file",
+    raw: {
+      parent: "String",
+      personalFile: "Boolean",
+      parentList: "String",
+      file: "Should be the last element",
+    },
     Login_required: true,
   },
   {
@@ -123,8 +128,79 @@ const FileApi = [
     Path: "/file-service/public/download/:id/tempToken",
     Login_required: false,
   },
+  {
+    "Request Name": "Create One Time Download Link",
+    "Request Type": "PATCH",
+    Path: "/file-service/make-one/:id",
+    Login_required: true,
+  },
 ];
 
-const documentation = { UsersApi, FileApi };
+const FolderApi = [
+  {
+    "Request Name": "Create Folder",
+    "Request Type": "POST",
+    Path: "/folder-service/upload",
+    raw: {
+      name: "New Folder",
+      parent: "",
+      parentList: "",
+    },
+    Login_required: true,
+  },
+  {
+    "Request Name": "Delete Folder",
+    "Request Type": "DELETE",
+    Path: "/folder-service/remove",
+    raw: {
+      id: "FolderID",
+      parentList: [],
+    },
+    Login_required: true,
+  },
+  {
+    "Request Name": "Get Folder Info",
+    "Request Type": "GET",
+    Path: "/folder-service/info/:id",
+    Login_required: true,
+  },
+  {
+    "Request Name": "Delete All Files And Folder",
+    "Request Type": "DELETE",
+    Path: "/folder-service/remove-all",
+    Login_required: true,
+  },
+  {
+    "Request Name": "Rename Folder",
+    "Request Type": "PATCH",
+    Path: "/folder-service/rename",
+    raw: {
+      id: "Folder ID",
+      title: "New Name Of Folder",
+    },
+    Login_required: true,
+  },
+  {
+    "Request Name": "Get Sub Folder List",
+    "Request Type": "GET",
+    Path: "/folder-service/subfolder-list",
+    QUERY: {
+      id: "Folder ID",
+    },
+    Login_required: true,
+  },
+  {
+    "Request Name": "Move Folder",
+    "Request Type": "PATCH",
+    Path: "/folder-service/move",
+    raw: {
+      id: "Folder ID",
+      parent: "Parent ID",
+    },
+    Login_required: true,
+  },
+];
+
+const documentation = { UsersApi, FileApi, FolderApi };
 
 module.exports = documentation;

@@ -15,6 +15,7 @@ const awaitStream = require("./utils/awaitStream");
 const ObjectID = require("mongodb").ObjectID;
 const subtractFromStorageSize = require("./utils/subtractFromStorageSize");
 const User = require("../../models/userModel");
+const Folder = require("../../models/folder");
 
 const conn = mongoose.connection;
 
@@ -37,13 +38,14 @@ class MongoService {
 
     const { file, filename, formData } = await getBusboyData(busboy);
 
+    console.log(formData);
+
     const parent = formData.get("parent") || "/";
     const parentList = formData.get("parentList") || "/";
     const size = formData.get("size") || "";
     const personalFile = formData.get("personal-file") ? true : false;
     let hasThumbnail = false;
     let thumbnailID = "";
-
     const isVideo = videoChecker(filename);
 
     const metadata = {
@@ -178,6 +180,8 @@ class MongoService {
   getPublicDownload = async (fileID, tempToken, res) => {
     const file = await dbUtilsFile.getPublicFile(fileID);
 
+    console.log(file.metadata);
+
     if (!file || !file.metadata.link || file.metadata.link !== tempToken) {
       throw new NotAuthorizedError("File Not Public");
     }
@@ -211,6 +215,76 @@ class MongoService {
 
     if (file.metadata.linkType === "one") {
       await dbUtilsFile.removeOneTimePublicLink(fileID);
+    }
+  };
+
+  deleteFolder = async (userID, folderID, parentList) => {
+    let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+      chunkSizeBytes: 1024 * 255,
+    });
+
+    const parentListString = parentList.toString();
+
+    await Folder.deleteMany({
+      owner: userID,
+      parentList: { $all: parentList },
+    });
+    await Folder.deleteMany({ owner: userID, _id: folderID });
+
+    const fileList = await dbUtilsFile.getFileListByParent(
+      userID,
+      parentListString
+    );
+
+    if (!fileList) throw new NotFoundError("Delete File List Not Found");
+
+    for (let i = 0; i < fileList.length; i++) {
+      const currentFile = fileList[i];
+
+      try {
+        if (currentFile.metadata.thumbnailID) {
+          await Thumbnail.deleteOne({ _id: currentFile.metadata.thumbnailID });
+        }
+
+        await bucket.delete(new ObjectID(currentFile._id));
+      } catch (e) {
+        console.log(
+          "Could not delete file",
+          currentFile.filename,
+          currentFile._id
+        );
+      }
+    }
+  };
+
+  deleteAll = async (userID) => {
+    let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+      chunkSizeBytes: 1024 * 255,
+    });
+
+    await Folder.deleteMany({ owner: userID });
+
+    const fileList = await dbUtilsFile.getFileListByOwner(userID);
+
+    if (!fileList)
+      throw new NotFoundError("Delete All File List Not Found Error");
+
+    for (let i = 0; i < fileList.length; i++) {
+      const currentFile = fileList[i];
+
+      try {
+        if (currentFile.metadata.thumbnailID) {
+          await Thumbnail.deleteOne({ _id: currentFile.metadata.thumbnailID });
+        }
+
+        await bucket.delete(new ObjectID(currentFile._id));
+      } catch (e) {
+        console.log(
+          "Could Not Remove File",
+          currentFile.filename,
+          currentFile._id
+        );
+      }
     }
   };
 }
