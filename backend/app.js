@@ -3,6 +3,8 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const busboy = require("connect-busboy");
 const errorMiddleware = require("./middleware/error");
+const helmet = require("helmet");
+const compression = require("compression");
 
 // Middleware
 app.use(cookieParser());
