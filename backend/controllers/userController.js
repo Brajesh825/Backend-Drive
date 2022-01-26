@@ -20,10 +20,6 @@ class UserController {
     });
 
     user.generateEncryptionKeys();
-    const decoded = await user.getEncryptionKey();
-
-    console.log(decoded);
-
     const emailToken = user.getEmailConfirmationToken();
     await user.save();
 
