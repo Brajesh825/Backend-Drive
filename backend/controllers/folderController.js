@@ -65,26 +65,26 @@ class FolderController {
     }
   };
 
-  // deleteAll = async (req, res) => {
-  //   try {
-  //     const userID = req.user._id;
+  deleteAll = async (req, res) => {
+    try {
+      const userID = req.user._id;
 
-  //     await this.chunkService.deleteAll(userID);
+      await this.chunkService.deleteAll(userID);
 
-  //     res.status(200).send({
-  //       success: true,
-  //       message: "Alls Files and Folder Successfully Deleted",
-  //     });
-  //   } catch (e) {
-  //     console.log("\nDelete All Error Folder Route:", e.message);
-  //     const code = !e.code
-  //       ? 500
-  //       : e.code >= 400 && e.code <= 599
-  //       ? e.code
-  //       : 500;
-  //     res.status(code).send();
-  //   }
-  // };
+      res.status(200).send({
+        success: true,
+        message: "Alls Files and Folder Successfully Deleted",
+      });
+    } catch (e) {
+      console.log("\nDelete All Error Folder Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 
   // renameFolder = async (req, res) => {
   //   try {

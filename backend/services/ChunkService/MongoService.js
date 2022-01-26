@@ -254,36 +254,36 @@ class MongoService {
     }
   };
 
-  // deleteAll = async (userID) => {
-  //   let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
-  //     chunkSizeBytes: 1024 * 255,
-  //   });
+  deleteAll = async (userID) => {
+    let bucket = new mongoose.mongo.GridFSBucket(conn.db, {
+      chunkSizeBytes: 1024 * 255,
+    });
 
-  //   await Folder.deleteMany({ owner: userID });
+    await Folder.deleteMany({ owner: userID });
 
-  //   const fileList = await dbUtilsFile.getFileListByOwner(userID);
+    const fileList = await dbUtilsFile.getFileListByOwner(userID);
 
-  //   if (!fileList)
-  //     throw new NotFoundError("Delete All File List Not Found Error");
+    if (!fileList)
+      throw new NotFoundError("Delete All File List Not Found Error");
 
-  //   for (let i = 0; i < fileList.length; i++) {
-  //     const currentFile = fileList[i];
+    for (let i = 0; i < fileList.length; i++) {
+      const currentFile = fileList[i];
 
-  //     try {
-  //       if (currentFile.metadata.thumbnailID) {
-  //         await Thumbnail.deleteOne({ _id: currentFile.metadata.thumbnailID });
-  //       }
+      try {
+        if (currentFile.metadata.thumbnailID) {
+          await Thumbnail.deleteOne({ _id: currentFile.metadata.thumbnailID });
+        }
 
-  //       await bucket.delete(new ObjectID(currentFile._id));
-  //     } catch (e) {
-  //       console.log(
-  //         "Could Not Remove File",
-  //         currentFile.filename,
-  //         currentFile._id
-  //       );
-  //     }
-  //   }
-  // };
+        await bucket.delete(new ObjectID(currentFile._id));
+      } catch (e) {
+        console.log(
+          "Could Not Remove File",
+          currentFile.filename,
+          currentFile._id
+        );
+      }
+    }
+  };
 }
 
 module.exports = MongoService;

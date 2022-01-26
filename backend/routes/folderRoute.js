@@ -14,7 +14,7 @@ router.delete("/remove", auth, folderController.deleteFolder);
 
 router.get("/info/:id", auth, folderController.getInfo);
 
-// router.delete("/remove-all", auth, folderController.deleteAll);
+router.delete("/remove-all", auth, folderController.deleteAll);
 
 // router.patch("/rename", auth, folderController.renameFolder);
 
