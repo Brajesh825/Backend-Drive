@@ -26,25 +26,25 @@ class FolderController {
     }
   };
 
-  // deleteFolder = async (req, res) => {
-  //   try {
-  //     const userID = req.user._id;
-  //     const folderID = req.body.id;
-  //     const parentList = req.body.parentList;
+  deleteFolder = async (req, res) => {
+    try {
+      const userID = req.user._id;
+      const folderID = req.body.id;
+      const parentList = req.body.parentList;
 
-  //     await this.chunkService.deleteFolder(userID, folderID, parentList);
+      await this.chunkService.deleteFolder(userID, folderID, parentList);
 
-  //     res.send();
-  //   } catch (e) {
-  //     console.log("\nDelete Folder Error Folder Route:", e.message);
-  //     const code = !e.code
-  //       ? 500
-  //       : e.code >= 400 && e.code <= 599
-  //       ? e.code
-  //       : 500;
-  //     res.status(code).send();
-  //   }
-  // };
+      res.send();
+    } catch (e) {
+      console.log("\nDelete Folder Error Folder Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 
   // getInfo = async (req, res) => {
   //   try {
