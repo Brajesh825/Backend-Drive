@@ -5,7 +5,9 @@ const authFullUser = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
-      throw new Error("Please login to access this resource");
+      return next(
+        new ErrorHandler("Please login to access this resource", 401)
+      );
     }
     const decodedData = jwt.verify(token, process.env.JWT_SECRET);
     const id = decodedData.id;
