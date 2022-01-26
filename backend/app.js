@@ -35,7 +35,7 @@ app.get("/", (req, res) => {
 app.use("/user-service/", user);
 app.use("/file-service/", file);
 app.use("/documentation/", document);
-app.use("/folder-service", folder);
+app.use("/folder-service/", folder);
 
 // Middleware for errors
 app.use(errorMiddleware);
