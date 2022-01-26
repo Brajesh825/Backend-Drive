@@ -1,6 +1,5 @@
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const busboy = require("connect-busboy");
 const errorMiddleware = require("./middleware/error");
@@ -40,5 +39,5 @@ app.use("/folder-service", folder);
 
 // Middleware for errors
 app.use(errorMiddleware);
-
+1;
 module.exports = app;
