@@ -129,25 +129,25 @@ class FolderController {
     }
   };
 
-  // moveFolder = async (req, res) => {
-  //   try {
-  //     const userID = req.user._id;
-  //     const folderID = req.body.id;
-  //     const parent = req.body.parent;
+  moveFolder = async (req, res) => {
+    try {
+      const userID = req.user._id;
+      const folderID = req.body.id;
+      const parent = req.body.parent;
 
-  //     await folderService.moveFolder(userID, folderID, parent);
+      await folderService.moveFolder(userID, folderID, parent);
 
-  //     res.send();
-  //   } catch (e) {
-  //     console.log("\nMove Folder Error Folder Route:", e.message);
-  //     const code = !e.code
-  //       ? 500
-  //       : e.code >= 400 && e.code <= 599
-  //       ? e.code
-  //       : 500;
-  //     res.status(code).send();
-  //   }
-  // };
+      res.send();
+    } catch (e) {
+      console.log("\nMove Folder Error Folder Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
 module.exports = FolderController;

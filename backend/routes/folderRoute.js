@@ -20,6 +20,6 @@ router.patch("/rename", auth, folderController.renameFolder);
 
 router.get("/subfolder-list", auth, folderController.getSubfolderList);
 
-// router.patch("/move", auth, folderController.moveFolder);
+router.patch("/move", auth, folderController.moveFolder);
 
 module.exports = router;
