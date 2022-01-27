@@ -109,25 +109,25 @@ class FolderController {
     }
   };
 
-  // getSubfolderList = async (req, res) => {
-  //   try {
-  //     const userID = req.user._id;
-  //     const folderID = req.query.id;
+  getSubfolderList = async (req, res) => {
+    try {
+      const userID = req.user._id;
+      const folderID = req.query.id;
 
-  //     const { folderIDList, folderNameList } =
-  //       await folderService.getFolderSublist(userID, folderID);
+      const { folderIDList, folderNameList } =
+        await folderService.getFolderSublist(userID, folderID);
 
-  //     res.send({ folderIDList, folderNameList });
-  //   } catch (e) {
-  //     console.log("\nGet Subfolder Error Folder Route:", e.message);
-  //     const code = !e.code
-  //       ? 500
-  //       : e.code >= 400 && e.code <= 599
-  //       ? e.code
-  //       : 500;
-  //     res.status(code).send();
-  //   }
-  // };
+      res.send({ folderIDList, folderNameList });
+    } catch (e) {
+      console.log("\nGet Subfolder Error Folder Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 
   // moveFolder = async (req, res) => {
   //   try {
