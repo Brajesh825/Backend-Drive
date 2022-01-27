@@ -16,7 +16,7 @@ router.get("/info/:id", auth, folderController.getInfo);
 
 router.delete("/remove-all", auth, folderController.deleteAll);
 
-// router.patch("/rename", auth, folderController.renameFolder);
+router.patch("/rename", auth, folderController.renameFolder);
 
 // router.get("/subfolder-list", auth, folderController.getSubfolderList);
 

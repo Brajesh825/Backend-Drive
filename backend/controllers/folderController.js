@@ -86,28 +86,28 @@ class FolderController {
     }
   };
 
-  // renameFolder = async (req, res) => {
-  //   try {
-  //     const userID = req.user._id;
-  //     const folderID = req.body.id;
-  //     const title = req.body.title;
+  renameFolder = async (req, res) => {
+    try {
+      const userID = req.user._id;
+      const folderID = req.body.id;
+      const title = req.body.title;
 
-  //     await folderService.renameFolder(userID, folderID, title);
+      await folderService.renameFolder(userID, folderID, title);
 
-  //     res.status(200).send({
-  //       success: true,
-  //       message: "Rename successful",
-  //     });
-  //   } catch (e) {
-  //     console.log("\nRename Folder Error Folder Route:", e.message);
-  //     const code = !e.code
-  //       ? 500
-  //       : e.code >= 400 && e.code <= 599
-  //       ? e.code
-  //       : 500;
-  //     res.status(code).send();
-  //   }
-  // };
+      res.status(200).send({
+        success: true,
+        message: "Rename successful",
+      });
+    } catch (e) {
+      console.log("\nRename Folder Error Folder Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 
   // getSubfolderList = async (req, res) => {
   //   try {
