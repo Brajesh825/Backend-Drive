@@ -1,4 +1,5 @@
 const FileService = require("../services/FileService");
+const sendEmail = require("../utils/sendEmail");
 
 const fileService = new FileService();
 
@@ -200,6 +201,38 @@ class FileController {
       res.send();
     } catch (e) {
       console.log("\nMove File Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
+
+  sendEmailShare = async (req, res) => {
+    try {
+      const user = req.user;
+      const fileID = req.body.id;
+      const receiver = req.body.receiver;
+
+      const userId = user._id.toString();
+
+      const file = await fileService.getFileInfo(userId, fileID);
+
+      const fileLink = `${req.protocol}://${req.get(
+        "host"
+      )}/file-service/public/download/${fileID}/${file.metadata.link}`;
+      const options = {
+        email: receiver,
+        subject: "A File Was Shared With You Through myDrive",
+        message: `Please navigate to the following link to view the file ${fileLink}`,
+      };
+      await sendEmail(options);
+
+      res.json({});
+    } catch (e) {
+      console.log("\nSend Share Email Error File Route:", e.message);
       const code = !e.code
         ? 500
         : e.code >= 400 && e.code <= 599

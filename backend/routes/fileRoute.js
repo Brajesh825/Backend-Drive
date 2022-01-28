@@ -30,4 +30,6 @@ router.get("/info/:id", auth, fileController.getFileInfo);
 
 router.patch("/move", auth, fileController.moveFile);
 
+router.post("/send-share-email", auth, fileController.sendEmailShare);
+
 module.exports = router;
