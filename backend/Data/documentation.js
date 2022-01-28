@@ -150,6 +150,16 @@ const FileApi = [
     },
     Login_required: true,
   },
+  {
+    "Request Name": "Share Download Link",
+    "Request Type": "POST",
+    Path: "/file-service/send-share-email",
+    raw: {
+      id: "File Id",
+      receiver: "Email Of Receiver",
+    },
+    Login_required: true,
+  },
 ];
 
 const FolderApi = [

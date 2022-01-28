@@ -137,6 +137,15 @@ https://backend-drive-m72by.ondigitalocean.app/documentation/view
                 parent : "Folder id where file is to be moved"
         }
 
+## Share Download Link
+
+        Req type: Post
+        PATH: /file-service/send-share-email
+        raw: {
+                id : "File Id"
+                receiver : "email of receiver"
+        }
+
 # Folder API
 
 ## Create Folder (Login Required)

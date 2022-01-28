@@ -220,9 +220,12 @@ class FileController {
 
       const file = await fileService.getFileInfo(userId, fileID);
 
+      if (!file.metadata.link) throw new Error("File is not Public");
+
       const fileLink = `${req.protocol}://${req.get(
         "host"
       )}/file-service/public/download/${fileID}/${file.metadata.link}`;
+
       const options = {
         email: receiver,
         subject: "A File Was Shared With You Through myDrive",
