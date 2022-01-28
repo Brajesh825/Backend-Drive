@@ -1,8 +1,11 @@
 const NotFoundError = require("../../utils/NotFoundError");
 const DbUtilFile = require("../../db/utils/fileUtils/index");
+const DbUtilFolder = require("../../db/utils/folderUtils");
+const Folder = require("../../models/folder");
 const jwt = require("jsonwebtoken");
 
 const dbUtilsFile = new DbUtilFile();
+const dbUtilsFolder = new DbUtilFolder();
 
 class MongoFileService {
   constructor() {}
@@ -62,6 +65,31 @@ class MongoFileService {
     }
 
     return { ...currentFile, parentName };
+  };
+
+  moveFile = async (userID, fileID, parentID) => {
+    let parentList = ["/"];
+
+    if (parentID.length !== 1) {
+      const parentFile = await dbUtilsFolder.getFolderInfo(parentID, userID);
+      if (!parentFile)
+        throw new NotFoundError("Rename Parent File Not Found Error");
+      parentList = parentFile.parentList;
+      parentList.push(parentID);
+      console.log(parentList);
+    }
+
+    const file = await dbUtilsFile.moveFile(
+      fileID,
+      userID,
+      parentID,
+      parentList.toString()
+    );
+
+    if (!file.lastErrorObject.updatedExisting)
+      throw new NotFoundError("Rename File Not Found Error");
+
+    return file;
   };
 }
 

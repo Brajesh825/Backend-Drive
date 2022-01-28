@@ -26,6 +26,8 @@ router.get("/public/download/:id/:tempToken", fileController.getPublicDownload);
 
 router.patch("/make-one/:id", auth, fileController.makeOneTimePublic);
 
-router.get("/file-service/info/:id", auth, fileController.getFileInfo);
+router.get("/info/:id", auth, fileController.getFileInfo);
+
+router.patch("/move", auth, fileController.moveFile);
 
 module.exports = router;

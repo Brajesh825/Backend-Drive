@@ -184,6 +184,30 @@ class FileController {
       res.status(code).send();
     }
   };
+
+  moveFile = async (req, res) => {
+    if (!req.user) {
+      return;
+    }
+
+    try {
+      const fileID = req.body.id;
+      const userID = req.user._id;
+      const parentID = req.body.parent;
+
+      await fileService.moveFile(userID, fileID, parentID);
+
+      res.send();
+    } catch (e) {
+      console.log("\nMove File Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
 module.exports = FileController;
