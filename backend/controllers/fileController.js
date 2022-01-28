@@ -165,6 +165,25 @@ class FileController {
       res.status(code).send();
     }
   };
+
+  getFileInfo = async (req, res) => {
+    try {
+      const fileID = req.params.id;
+      const userID = req.user._id;
+
+      const file = await fileService.getFileInfo(userID, fileID);
+
+      res.send(file);
+    } catch (e) {
+      console.log("\nGet File Info Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
 module.exports = FileController;

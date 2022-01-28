@@ -41,11 +41,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: null,
   },
-  storageData: {
-    storageSize: Number,
-    storageLimit: Number,
-    failed: Boolean,
-  },
   storageDataPersonal: {
     storageSize: Number,
     failed: Boolean,
@@ -67,7 +62,6 @@ userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) {
     next();
   }
-
   this.password = await bcrypt.hash(this.password, 10);
 });
 
