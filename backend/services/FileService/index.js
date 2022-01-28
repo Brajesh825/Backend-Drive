@@ -76,7 +76,6 @@ class MongoFileService {
         throw new NotFoundError("Rename Parent File Not Found Error");
       parentList = parentFile.parentList;
       parentList.push(parentID);
-      console.log(parentList);
     }
 
     const file = await dbUtilsFile.moveFile(

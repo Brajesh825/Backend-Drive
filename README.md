@@ -123,6 +123,20 @@ https://backend-drive-m72by.ondigitalocean.app/documentation/view
         Req type: PATCH
         PATH: /file-service/make-one/:id
 
+## Get File Info
+
+        Req type: GET
+        PATH: /file-service/info/:id
+
+## Move File
+
+        Req type: PATCH
+        PATH: /file-service/move
+        raw: {
+                id : "File Id"
+                parent : "Folder id where file is to be moved"
+        }
+
 # Folder API
 
 ## Create Folder (Login Required)

@@ -134,6 +134,22 @@ const FileApi = [
     Path: "/file-service/make-one/:id",
     Login_required: true,
   },
+  {
+    "Request Name": "Get File Info",
+    "Request Type": "GET",
+    Path: "/file-service/info/:id",
+    Login_required: true,
+  },
+  {
+    "Request Name": "Move File",
+    "Request Type": "PATCH",
+    Path: "/file-service/move",
+    raw: {
+      id: "File Id",
+      parent: "Folder id where file is to be moved",
+    },
+    Login_required: true,
+  },
 ];
 
 const FolderApi = [
