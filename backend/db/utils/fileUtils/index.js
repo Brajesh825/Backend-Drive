@@ -30,7 +30,6 @@ class DbUtil {
         { _id: new ObjectID(fileID), "metadata.owner": new ObjectID(userID) },
         { $unset: { "metadata.linkType": "", "metadata.link": "" } }
       );
-
     return file;
   };
 

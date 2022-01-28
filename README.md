@@ -146,6 +146,21 @@ https://backend-drive-m72by.ondigitalocean.app/documentation/view
                 receiver : "email of receiver"
         }
 
+## Check Public File Info
+
+        Req type: GET
+        PATH: /file-service/public/:id/:tempToken
+
+## Remove Public Download LInk
+
+        Req type: Delete
+        PATH: /file-service/remove-link/:id/
+
+## Get all Files Of User
+
+        Req type: GET
+        Path: /file-service/quick-list
+
 # Folder API
 
 ## Create Folder (Login Required)

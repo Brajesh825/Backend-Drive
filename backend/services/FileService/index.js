@@ -90,6 +90,33 @@ class MongoFileService {
 
     return file;
   };
+
+  getPublicInfo = async (fileID, tempToken) => {
+    const file = await dbUtilsFile.getPublicInfo(fileID, tempToken);
+    if (!file || !file.metadata.link || file.metadata.link !== tempToken) {
+      throw new NotFoundError("Public Info Not Found");
+    } else {
+      return file;
+    }
+  };
+
+  removeLink = async (userID, fileID) => {
+    const file = await dbUtilsFile.removeLink(fileID, userID);
+
+    if (!file.lastErrorObject.updatedExisting)
+      throw new NotFoundError("Remove Link File Not Found Error");
+  };
+
+  getQuickList = async (user) => {
+    const userID = user._id;
+    const s3Enabled = user.s3Enabled ? true : false;
+
+    const quickList = await dbUtilsFile.getQuickList(userID, s3Enabled);
+
+    if (!quickList) throw new NotFoundError("Quick List Not Found Error");
+
+    return quickList;
+  };
 }
 
 module.exports = MongoFileService;

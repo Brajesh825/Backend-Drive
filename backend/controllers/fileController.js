@@ -244,6 +244,61 @@ class FileController {
       res.status(code).send();
     }
   };
+
+  getPublicInfo = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const tempToken = req.params.tempToken;
+
+      const file = await fileService.getPublicInfo(id, tempToken);
+
+      res.send(file);
+    } catch (e) {
+      console.log("\nGet Public Info Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
+
+  removeLink = async (req, res) => {
+    try {
+      const id = req.params.id;
+      const userID = req.user._id;
+
+      await fileService.removeLink(userID, id);
+
+      res.send();
+    } catch (e) {
+      console.log("\nRemove Public Link Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
+
+  getQuickList = async (req, res) => {
+    try {
+      const user = req.user;
+      const quickList = await fileService.getQuickList(user);
+
+      res.send(quickList);
+    } catch (e) {
+      console.log("\nGet Quick List Error File Route:", e.message);
+      const code = !e.code
+        ? 500
+        : e.code >= 400 && e.code <= 599
+        ? e.code
+        : 500;
+      res.status(code).send();
+    }
+  };
 }
 
 module.exports = FileController;

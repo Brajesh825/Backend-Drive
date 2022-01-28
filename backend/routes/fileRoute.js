@@ -32,4 +32,10 @@ router.patch("/move", auth, fileController.moveFile);
 
 router.post("/send-share-email", auth, fileController.sendEmailShare);
 
+router.get("/public/info/:id/:tempToken", fileController.getPublicInfo);
+
+router.delete("/remove-link/:id", auth, fileController.removeLink);
+
+router.get("/quick-list", auth, fileController.getQuickList);
+
 module.exports = router;
