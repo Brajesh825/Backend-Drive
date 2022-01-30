@@ -11,7 +11,9 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "axios": "^0.25.0",
         "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.1",
         "compression": "^1.7.4",
         "connect-busboy": "^1.0.0",
         "cookie-parser": "^1.4.6",
@@ -26,7 +28,7 @@
         "multer-gridfs-storage": "^5.0.2",
         "nodemailer": "^6.7.2",
         "nodemon": "^2.0.15",
-        "qr-image": "^3.2.0",
+        "qrcode": "^1.5.0",
         "sharp": "^0.29.3",
         "stream": "^0.0.2",
         "validator": "^13.7.0"

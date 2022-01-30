@@ -5,12 +5,13 @@ const busboy = require("connect-busboy");
 const errorMiddleware = require("./middleware/error");
 const helmet = require("helmet");
 const compression = require("compression");
-const qr = require("qr-image");
+const qr = require("qrcode");
+const bp = require("body-parser");
 
 // Middleware
 app.set("view engine", "ejs");
 app.use(cookieParser());
-app.use(express.json());
+app.use(express.json({}));
 app.use(helmet());
 app.use(compression());
 
@@ -26,30 +27,29 @@ const file = require("./routes/fileRoute");
 const document = require("./routes/documentRoute");
 const folder = require("./routes/folderRoute");
 
-app.get("/", (req, res) => {
-    res.json({
-        "Drive API": {
-            "View Documentation": "/documentation/view",
-        },
-    });
-});
+// Simple routing to the index.ejs file
 
-app.get("/createQRCode", (req, res) => {
-    var text = req.query.text || "";
-    try {
-        var img = qr.image(text, { size: 10 });
-        res.writeHead(200, { "Content-Type": "image/png" });
-        img.pipe(res);
-    } catch (e) {
-        res.writeHead(414, { "Content-Type": "text/html" });
-        res.end("<h1>414 Request-URI Too Large</h1>");
-    }
-});
+var publicDir = require("path").join(__dirname, "/public");
+app.use(express.static(publicDir));
 
 app.use("/user-service/", user);
 app.use("/file-service/", file);
 app.use("/documentation/", document);
 app.use("/folder-service/", folder);
+
+app.use(bp.urlencoded({ extended: false }));
+app.get("/createQR", (req, res) => {
+    res.render("index");
+});
+app.post("/createQR", (req, res) => {
+    const url = req.body.url;
+    if (url.length === 0) res.send("Empty Data!");
+    qr.toDataURL(url, (err, src) => {
+        if (err) res.send("Error occured");
+        imgLink = "/images/fb.png";
+        res.render("scan", { src, imgLink });
+    });
+});
 
 // Middleware for errors
 app.use(errorMiddleware);
