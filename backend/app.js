@@ -29,7 +29,7 @@ const folder = require("./routes/folderRoute");
 
 // Simple routing to the index.ejs file
 
-var publicDir = require("path").join(__dirname, "/public");
+var publicDir = require("path").join(__dirname, "..", "/public");
 app.use(express.static(publicDir));
 
 app.use("/user-service/", user);
@@ -43,11 +43,30 @@ app.get("/createQR", (req, res) => {
 });
 app.post("/createQR", (req, res) => {
     const url = req.body.url;
+    const type = req.body.type || "svg";
+    const color = req.body.color || "#000";
     if (url.length === 0) res.send("Empty Data!");
-    qr.toDataURL(url, (err, src) => {
-        if (err) res.send("Error occured");
-        imgLink = "/images/fb.png";
-        res.render("scan", { src, imgLink });
+    var opts = {
+        color: {
+            dark: color,
+            light: "#0000", // Transparent background
+        },
+    };
+    var result = "";
+    var characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    var charactersLength = characters.length;
+    for (var i = 0; i < charactersLength; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    result += "." + type;
+
+    const FilePath = "./public/images/" + result;
+    src = "/images/" + result;
+
+    qr.toFile(FilePath, url, opts, function(err) {
+        if (err) throw err;
+        res.render("scan", { src });
     });
 });
 
