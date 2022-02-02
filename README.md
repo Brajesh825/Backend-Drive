@@ -161,6 +161,19 @@ https://backend-drive-m72by.ondigitalocean.app/documentation/view
         Req type: GET
         Path: /file-service/quick-list
 
+## Get Filtered Files Of USer
+
+        Req type: GET
+        Path: /file-service/quick-list
+        query: {
+                parent : ""
+                limit : "default is 50"
+                sortby : "Default is data descending , options are alp_asc,alp_desc,date_asc"
+                startAt: "Boolean"
+                startAtName : "",
+                startAtDate : ""
+        }
+
 # Folder API
 
 ## Create Folder (Login Required)
@@ -217,3 +230,20 @@ https://backend-drive-m72by.ondigitalocean.app/documentation/view
                 id: "Folder Id",
                 parent : "Parent ID"
         }
+
+## List Sub Folder
+
+        ReqType: GET
+        PATH: /folder-service/list
+        queryparams:
+        {
+              parent : "id of parent , defaut is '/' for home page ",
+              sortby : "Default is data descending , options are alp_asc,alp_desc,date_asc",
+              type: "default is monogo no need to change",
+
+        }
+
+## List SubFolder full list (No Filters)
+
+                ReqType: GET
+                PATH: /folder-service/list?id="id Of Parent whose childs are to be shown"
