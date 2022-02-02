@@ -7,8 +7,10 @@ const helmet = require("helmet");
 const compression = require("compression");
 const qr = require("qrcode");
 const bp = require("body-parser");
+const cors = require("cors");
 
 // Middleware
+app.use(cors());
 app.set("view engine", "ejs");
 app.use(cookieParser());
 app.use(express.json({}));
