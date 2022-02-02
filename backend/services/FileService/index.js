@@ -4,6 +4,7 @@ const DbUtilFolder = require("../../db/utils/folderUtils");
 const Folder = require("../../models/folder");
 const jwt = require("jsonwebtoken");
 const createQuery = require("../../utils/createQuery");
+const sortBySwitch = require("../../utils/sortBySwitch");
 const dbUtilsFile = new DbUtilFile();
 const dbUtilsFolder = new DbUtilFolder();
 

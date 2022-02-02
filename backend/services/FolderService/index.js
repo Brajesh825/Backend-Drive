@@ -2,6 +2,7 @@ const Folder = require("../../models/folder");
 const InternalServerError = require("../../utils/InternalServerError.js");
 const NotFoundError = require("../../utils/NotFoundError");
 const UtlsFolder = require("../../db/utils/folderUtils");
+const sortBySwitch = require("../../utils/sortBySwitchFolder.js");
 
 const utilsFolder = new UtlsFolder();
 
@@ -135,7 +136,6 @@ class FolderService {
 
     getFolderList = async(user, query) => {
         const userID = user._id;
-
         let searchQuery = query.search || "";
         const parent = query.parent || "/";
         let sortBy = query.sortby || "DEFAULT";
@@ -183,10 +183,13 @@ class FolderService {
 
     getSubfolderFullList = async(user, id) => {
         const userID = user._id;
-
         const folder = await utilsFolder.getFolderInfo(id, userID);
 
-        const subFolders = await this.getFolderList(user, { parent });
+        const query = {
+            parent: id,
+        };
+
+        const subFolders = await this.getFolderList(user, query);
 
         let folderList = [];
 

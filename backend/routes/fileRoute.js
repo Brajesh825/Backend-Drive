@@ -38,6 +38,6 @@ router.delete("/remove-link/:id", auth, fileController.removeLink);
 
 router.get("/quick-list", auth, fileController.getQuickList);
 
-router.get("/file-service/list", auth, fileController.getList);
+router.get("/list", auth, fileController.getList);
 
 module.exports = router;

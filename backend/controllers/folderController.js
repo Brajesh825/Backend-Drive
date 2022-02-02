@@ -1,3 +1,5 @@
+const NotFoundError = require("../utils/NotFoundError");
+
 const FolderService = require("../services/FolderService");
 
 const folderService = new FolderService();
@@ -170,6 +172,8 @@ class FolderController {
         try {
             const user = req.user;
             const id = req.query.id;
+
+            if (!id) throw new NotFoundError("Folder ID is invalid");
 
             const subfolderList = await folderService.getSubfolderFullList(user, id);
 
