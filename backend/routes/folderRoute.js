@@ -22,4 +22,8 @@ router.get("/subfolder-list", auth, folderController.getSubfolderList);
 
 router.patch("/move", auth, folderController.moveFolder);
 
+router.get("/folder-service/list", auth, folderController.getFolderList);
+
+router.get("/subfolder-list-full", auth, folderController.getSubfolderFullList);
+
 module.exports = router;

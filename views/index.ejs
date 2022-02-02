@@ -15,7 +15,7 @@
     
     .container {
         display: flex;
-        height: 100vh;
+        height: 80vh;
         width: 100vw;
         justify-content: center;
         align-items: center;
@@ -32,44 +32,63 @@
     }
     
     .input-wrapper {
+        text-align: center;
         padding: 0.5rem;
     }
     
     .input-wrapper input {
         height: 2rem;
-        width: 100%;
+        width: 90%;
+        border: none;
+        border-radius: 0.5rem;
+        padding-left: 1rem;
     }
     
     .input-wrapper select {
         height: 2rem;
-        width: 100%;
+        width: 96%;
+        border: none;
+        border-radius: 0.5rem;
+        padding-left: 1rem;
+    }
+    
+    #submit {
+        width: 96%;
+    }
+    
+    header {
+        padding: 1rem;
+        text-align: center;
     }
 </style>
 
 <body>
+    <header>
+        <H1>QR CODE GENERATOR</H1>
+    </header>
     <div class="container">
         <form class="qr-form" action="/createQR" method="post">
             <div class="input-wrapper">
                 <input type="text" name="url" id="url" placeholder="Enter Link" />
-            </div class="input-wrapper">
+            </div>
             <div class="input-wrapper">
                 <select name="type" id="type">
             <option value="png">image/png</option>
             <option value="jpeg">image/jpeg</option>
             <option value="svg">image/svg</option>
           </select>
-            </div class="input-wrapper">
+            </div>
             <div class="input-wrapper">
                 <select name="color" id="type">
             <option value="#000">Black</option>
             <option value="#00F">Blue</option>
             <option value="#FF0000">Red</option>
           </select>
-            </div class="input-wrapper">
+            </div>
 
             <div class="input-wrapper">
                 <input type="submit" name="submit" id="submit" />
-            </div class="input-wrapper">
+            </div>
         </form>
     </div>
 </body>
