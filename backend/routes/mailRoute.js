@@ -7,7 +7,7 @@ router.route("/verify").get((req, res, next) => {
     console.log("Hello");
     const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 587,
+        port: 465,
         auth: {
             user: "tes27769@gmail.com",
             pass: "2778@tes",
