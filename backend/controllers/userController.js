@@ -11,22 +11,19 @@ class UserController {
 
     // Register a user
     registerUser = catchAsyncErrors(async(req, res, next) => {
+        const { name, email, password } = req.body;
+
+        const user = await User.create({
+            name,
+            email,
+            password,
+        });
+
+        user.generateEncryptionKeys();
+
+        const emailToken = user.getEmailConfirmationToken();
+        await user.save();
         try {
-            const { name, email, password } = req.body;
-
-            console.log(name);
-
-            const user = await User.create({
-                name,
-                email,
-                password,
-            });
-
-            user.generateEncryptionKeys();
-
-            const emailToken = user.getEmailConfirmationToken();
-            await user.save();
-
             if (process.env.EMAIL_VERIFIED === "True") {
                 const emailConfirmationUrl = `${req.protocol}://${req.get(
           "host"
