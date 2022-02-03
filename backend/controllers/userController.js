@@ -20,24 +20,25 @@ class UserController {
         });
 
         user.generateEncryptionKeys();
-        const emailToken = user.getEmailConfirmationToken();
-        await user.save();
 
-        const emailConfirmationUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/user-service/verify-email/${emailToken}`;
+        // const emailToken = user.getEmailConfirmationToken();
+        // await user.save();
 
-        const message = `click here to confirm your registration with us:- \n\n ${emailConfirmationUrl} \n\n If you have not requested this email then ,Please ignore it`;
+        //     const emailConfirmationUrl = `${req.protocol}://${req.get(
+        //   "host"
+        // )}/user-service/verify-email/${emailToken}`;
+
+        // const message = `click here to confirm your registration with us:- \n\n ${emailConfirmationUrl} \n\n If you have not requested this email then ,Please ignore it`;
         try {
-            await sendEmail({
-                email: user.email,
-                subject: `Registration with us`,
-                message,
-            });
+            // await sendEmail({
+            //     email: user.email,
+            //     subject: `Registration with us`,
+            //     message,
+            // });
 
             res.status(200).json({
                 success: true,
-                message: `Email sent to ${user.email} successfully`,
+                message: `User successfully registered `,
             });
         } catch (error) {
             user.getResetPasswordToken = undefined;
