@@ -29,6 +29,7 @@
         "nodemailer": "^6.7.2",
         "nodemon": "^2.0.15",
         "qrcode": "^1.5.0",
+        "sendmail": "^1.6.1",
         "sharp": "^0.29.3",
         "stream": "^0.0.2",
         "validator": "^13.7.0"
