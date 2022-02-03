@@ -3,7 +3,14 @@ const User = require("../models/userModel");
 
 const authFullUser = async(req, res, next) => {
     try {
-        const { token } = req.cookies;
+        const bearerHeader = req.headers["authorization"];
+
+        if (!bearerHeader) throw new Error("Authorization header is empty");
+
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        const token = bearerToken;
+
         if (!token) {
             throw new Error("Please login to access this resource", 401);
         }
