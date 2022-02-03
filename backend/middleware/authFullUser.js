@@ -20,7 +20,10 @@ const authFullUser = async(req, res, next) => {
 
         if (!fullUser) throw new Error("No User");
 
-        // if (!fullUser.emailVerified) throw new Error("Email Not Verified");
+        if (process.env.EMAIL_VERIFIED === "True") {
+            if (!fullUser.emailVerified) throw new Error("Email Not Verified");
+        }
+
         req.user = fullUser;
 
         next();

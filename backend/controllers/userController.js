@@ -11,30 +11,33 @@ class UserController {
 
     // Register a user
     registerUser = catchAsyncErrors(async(req, res, next) => {
-        const { name, email, password } = req.body;
-
-        const user = await User.create({
-            name,
-            email,
-            password,
-        });
-
-        user.generateEncryptionKeys();
-
-        // const emailToken = user.getEmailConfirmationToken();
-        // await user.save();
-
-        //     const emailConfirmationUrl = `${req.protocol}://${req.get(
-        //   "host"
-        // )}/user-service/verify-email/${emailToken}`;
-
-        // const message = `click here to confirm your registration with us:- \n\n ${emailConfirmationUrl} \n\n If you have not requested this email then ,Please ignore it`;
         try {
-            // await sendEmail({
-            //     email: user.email,
-            //     subject: `Registration with us`,
-            //     message,
-            // });
+            const { name, email, password } = req.body;
+
+            const user = await User.create({
+                name,
+                email,
+                password,
+            });
+
+            user.generateEncryptionKeys();
+
+            const emailToken = user.getEmailConfirmationToken();
+            await user.save();
+
+            if (process.env.EMAIL_VERIFIED === "True") {
+                const emailConfirmationUrl = `${req.protocol}://${req.get(
+          "host"
+        )}/user-service/verify-email/${emailToken}`;
+
+                const message = `click here to confirm your registration with us:- \n\n ${emailConfirmationUrl} \n\n If you have not requested this email then ,Please ignore it`;
+
+                await sendEmail({
+                    email: user.email,
+                    subject: `Registration with us`,
+                    message,
+                });
+            }
 
             res.status(200).json({
                 success: true,
