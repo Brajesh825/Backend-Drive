@@ -25,6 +25,8 @@ class UserController {
         await user.save();
         try {
             if (process.env.EMAIL_VERIFIED === "True") {
+                ("");
+                console.log("Email Route entered");
                 const emailConfirmationUrl = `${req.protocol}://${req.get(
           "host"
         )}/user-service/verify-email/${emailToken}`;

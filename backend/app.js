@@ -28,7 +28,6 @@ const user = require("./routes/userRoute");
 const file = require("./routes/fileRoute");
 const document = require("./routes/documentRoute");
 const folder = require("./routes/folderRoute");
-const mail = require("./routes/mailRoute");
 // Simple routing to the index.ejs file
 
 var publicDir = require("path").join(__dirname, "..", "/public");
@@ -38,7 +37,6 @@ app.use("/user-service/", user);
 app.use("/file-service/", file);
 app.use("/documentation/", document);
 app.use("/folder-service/", folder);
-app.use("/gmail-service", mail);
 
 app.use(bp.urlencoded({ extended: false }));
 app.get("/createQR", (req, res) => {
