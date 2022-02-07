@@ -33,10 +33,8 @@ async function checkQR() {
         },
         body: JSON.stringify(data),
     });
-
     const status = response.status;
     const responseObj = await response.json();
-
     if (status == "404") {
         setTimeout(checkQR, 5000);
     } else if (status == "200") {
@@ -44,7 +42,6 @@ async function checkQR() {
         token["expires_in"] = responseObj.expires_in;
         token["scope"] = responseObj.scope;
         token["token_type"] = responseObj.token_type;
-
         console.log(token);
     } else {
         return;

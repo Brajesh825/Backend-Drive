@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Qr Login</title>
+</head>
+
+<style>
+    .scanner span:first-child {
+        display: none !important;
+    }
+    
+    .scanner a {
+        text-decoration: none !important;
+    }
+</style>
+
+<body>
+    <div>
+        <div>
+            <div class="scanner" style="width: 500px" id="reader"></div>
+        </div>
+    </div>
+</body>
+
+<script src="html5-qrcode.min.js"></script>
+<script type="text/javascript">
+    const host = "http://localhost:4000";
+
+    async function onScanSuccess(qrCodeMessage) {
+        const code = qrCodeMessage;
+        const data = {
+            qrLoginToken: code,
+        };
+        const response = await fetch(host + "/user-service/allow-qr-login", {
+            method: "POST",
+            headers: {
+                "content-Type": "application/json",
+                Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYxZmJjZWUyNzU1MDBlZWUxYTViYWMyNSIsImlhdCI6MTY0NDI1MjU2MywiZXhwIjoxNjQ0MzM4OTYzfQ.Bz1zpaLBqrpMeKCiq-LC31oNcQxGJXrJ5R6Ukdp32_o",
+            },
+            body: JSON.stringify(data),
+        });
+        const responseObj = await response.json();
+    }
+
+    function onScanError(errorMessage) {
+        console.log(errorMessage);
+    }
+
+    var html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+        fps: 10,
+        qrbox: 250,
+    });
+    html5QrcodeScanner.render(onScanSuccess, onScanError);
+</script>
+
+</html>

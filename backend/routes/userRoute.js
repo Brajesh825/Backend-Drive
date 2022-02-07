@@ -12,11 +12,12 @@ router.route("/verify-email/:token").get(userController.verifyEmail);
 router.route("/login").post(userController.loginUser);
 router.route("/logout").get(userController.logout);
 router
-  .route("/resend-verify-email")
-  .post(auth, userController.resendVerifyEmail);
+    .route("/resend-verify-email")
+    .post(auth, userController.resendVerifyEmail);
 router.route("/change-password").patch(auth, userController.changePassword);
 router.route("/user").get(auth, userController.getCurrentUser);
 router.route("/forget-password").post(userController.forgetPassword);
 router.route("/reset-password/:token").get(userController.resetPassword);
+router.route("/allow-qr-login").post(auth, userController.createQRLoginToken);
 
 module.exports = router;

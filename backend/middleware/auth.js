@@ -7,6 +7,8 @@ const auth = async(req, res, next) => {
 
         if (!bearerHeader) throw new Error("Authorization header is empty");
 
+        // console.log(bearerHeader);
+
         const bearer = bearerHeader.split(" ");
         const bearerToken = bearer[1];
         const token = bearerToken;

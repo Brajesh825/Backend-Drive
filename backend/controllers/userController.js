@@ -226,6 +226,26 @@ class UserController {
         await user.save();
         sendToken(user, 200, res);
     });
+
+    // Create QR Login Token
+    createQRLoginToken = async(req, res, next) => {
+        try {
+            const { qrLoginToken } = req.body;
+
+            if (!qrLoginToken) throw new Error("Invalid QR");
+
+            const user = req.user;
+
+            user.qrLoginToken = qrLoginToken;
+            const test = await user.save();
+            console.log(test);
+
+            res.status(200).json({ success: true });
+        } catch (error) {
+            console.log(error.message);
+            res.status(400).json({ success: false });
+        }
+    };
 }
 
 module.exports = UserController;
