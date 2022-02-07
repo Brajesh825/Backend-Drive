@@ -60,6 +60,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false,
     },
+    qrLoginToken: {
+        type: String,
+    },
 });
 
 userSchema.pre("save", async function(next) {
