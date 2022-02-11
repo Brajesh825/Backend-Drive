@@ -8,9 +8,9 @@ async function onSignIn(googleUser) {
     $(".data").css("display", "block");
     $(".g-signin2").css("display", "none");
 
-    const id_token = googleUser.wc.id_token;
+    const idToken = googleUser.wc.id_token;
 
-    const data = { id_token };
+    const data = { idToken };
     const response = await fetch("/google-service/login", {
         method: "POST",
         headers: {
