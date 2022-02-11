@@ -32,11 +32,13 @@ const file = require("./routes/fileRoute");
 const document = require("./routes/documentRoute");
 const folder = require("./routes/folderRoute");
 const qr = require("./routes/qrRoute");
+const google = require("./routes/googleRoute");
 // Simple routing to the index.ejs file
 
 var publicDir = require("path").join(__dirname, "..", "/public");
 app.use(express.static(publicDir));
 
+app.use("/google-service/", google);
 app.use("/user-service/", user);
 app.use("/file-service/", file);
 app.use("/documentation/", document);
