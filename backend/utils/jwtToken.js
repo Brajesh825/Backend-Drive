@@ -11,7 +11,7 @@ const sendToken = (user, statusCode, res) => {
         type: "bearer",
     };
 
-    res.status(statusCode).json({
+    res.status(200).send({
         success: true,
         token_type: "Bearer",
         scope: "customScope",

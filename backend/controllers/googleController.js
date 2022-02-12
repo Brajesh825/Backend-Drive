@@ -22,6 +22,8 @@ class GoogleController {
 
             const user = await googleService.Login(payload);
 
+            console.log(user);
+
             sendToken(user, 200, res);
         } catch (error) {
             console.log(error.message);

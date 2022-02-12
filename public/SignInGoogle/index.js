@@ -19,7 +19,8 @@ async function onSignIn(googleUser) {
         body: JSON.stringify(data),
     });
 
-    console.log(response);
+    const responseObj = await response.json();
+    console.log(responseObj);
 }
 
 function signOut() {
