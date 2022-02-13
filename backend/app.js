@@ -83,7 +83,7 @@ passport.use(
     new GitHubStrategy({
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
-            callbackURL: "https://backend.unbelong.in/login/auth/github/callback",
+            callbackURL: "https://backend.unbelong.in/auth/github/callback",
         },
         function(accessToken, refreshToken, profile, cb) {
             cb(null, profile);
