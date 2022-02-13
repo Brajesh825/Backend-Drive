@@ -43,6 +43,7 @@ app.use("/user-service/", user);
 app.use("/file-service/", file);
 app.use("/documentation/", document);
 app.use("/folder-service/", folder);
+
 app.use(bp.urlencoded({ extended: false }));
 app.use("/qr-service/", qr);
 
@@ -82,7 +83,7 @@ passport.use(
     new GitHubStrategy({
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/auth/github/callback",
+            callbackURL: "https://backend.unbelong.in/login/auth/github/callback",
         },
         function(accessToken, refreshToken, profile, cb) {
             cb(null, profile);
