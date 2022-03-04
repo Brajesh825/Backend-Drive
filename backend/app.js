@@ -117,16 +117,22 @@ app.get(
 );
 
 var satelize = require("satelize");
+var ipaddr = require("ipaddr.js");
 
 app.use(express.json());
 
 app.get("/ShowMyLocation", (req, res) => {
-    var ip = req.header("x-forwarded-for") || req.connection.remoteAddress;
+    let remoteAddress = req.ip;
+    if (ipaddr.isValid(remoteAddress)) {
+        const addr = ipaddr.parse(remoteAddress);
+        if (addr.kind() === "ipv6" && addr.isIPv4MappedAddress()) {
+            remoteAddress = addr.toIPv4Address().toString();
+        }
+    }
 
-    console.log(req);
-    console.log(ip);
+    console.log(remoteAddress);
 
-    satelize.satelize({ ip: ip }, function(err, payload) {
+    satelize.satelize({ ip: remoteAddress }, function(err, payload) {
         res.send(payload);
     });
 });
