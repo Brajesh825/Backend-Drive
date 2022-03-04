@@ -116,26 +116,27 @@ app.get(
     }
 );
 
-var satelize = require("satelize");
-var ipaddr = require("ipaddr.js");
+// var satelize = require("satelize");
+// var ipaddr = require("ipaddr.js");
 
-app.use(express.json());
+// app.use(express.json());
 
-app.get("/ShowMyLocation", (req, res) => {
-    let remoteAddress = req.ip;
-    if (ipaddr.isValid(remoteAddress)) {
-        const addr = ipaddr.parse(remoteAddress);
-        if (addr.kind() === "ipv6" && addr.isIPv4MappedAddress()) {
-            remoteAddress = addr.toIPv4Address().toString();
-        }
-    }
+// app.get("/ShowMyLocation", (req, res) => {
+//     let remoteAddress = req.ip;
+//     if (ipaddr.isValid(remoteAddress)) {
+//         const addr = ipaddr.parse(remoteAddress);
+//         if (addr.kind() === "ipv6" && addr.isIPv4MappedAddress()) {
+//             remoteAddress = addr.toIPv4Address().toString();
+//         }
+//     }
 
-    console.log(remoteAddress);
+//     console.log(remoteAddress);
 
-    satelize.satelize({ ip: remoteAddress }, function(err, payload) {
-        res.send(payload);
-    });
-});
+//     satelize.satelize({ ip: "11.11.11.11" }, function(err, payload) {
+
+//         res.send({ payload });
+//     });
+// });
 
 
 // Middleware for errors
