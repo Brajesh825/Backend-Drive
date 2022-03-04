@@ -121,8 +121,9 @@ var satelize = require("satelize");
 app.use(express.json());
 
 app.get("/ShowMyLocation", (req, res) => {
-    var ip = req.ip;
+    var ip = req.header("x-forwarded-for") || req.connection.remoteAddress;
 
+    console.log(req);
     console.log(ip);
 
     satelize.satelize({ ip: ip }, function(err, payload) {
