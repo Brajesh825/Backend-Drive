@@ -116,6 +116,21 @@ app.get(
     }
 );
 
+var satelize = require("satelize");
+
+app.use(express.json());
+
+app.get("/ShowMyLocation", (req, res) => {
+    var ip = req.ip;
+
+    console.log(ip);
+
+    satelize.satelize({ ip: ip }, function(err, payload) {
+        res.send(payload);
+    });
+});
+
+
 // Middleware for errors
 app.use(errorMiddleware);
 

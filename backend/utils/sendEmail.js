@@ -23,6 +23,8 @@ const sendEmail = async(options) => {
     try {
         const accessToken = await oAuth2Client.getAccessToken();
 
+        console.log(REFRESH_TOKEN);
+
         const transport = nodemailer.createTransport({
             service: "gmail",
             auth: {
@@ -46,7 +48,7 @@ const sendEmail = async(options) => {
         const result = await transport.sendMail(mailOptions);
         return result;
     } catch (error) {
-        return error;
+        console.log(error);
     }
 };
 
